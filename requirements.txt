@@ -1,0 +1,8 @@
+pandas
+pyarrow
+openpyxl
+pyyaml
+chardet
+pytest
+sqlalchemy
+pymysql

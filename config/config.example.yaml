@@ -1,0 +1,65 @@
+pipeline:
+  name: "PyFlow Taxi ETL Pipeline"
+  version: "1.0"
+  description: "Config-driven ETL pipeline for multi-format data processing"
+
+input:
+  main_file_path: "data/raw/yellow_tripdata_2026-04.parquet"
+  main_file_type: "parquet"
+  lookup_file_path: "data/raw/taxi_zone_lookup.csv"
+  lookup_file_type: "csv"
+output:
+  processed_csv: "data/processed/clean_taxi_data.csv"
+  processed_parquet: "data/processed/clean_taxi_data.parquet"
+  processed_json: "data/processed/clean_taxi_data.json"
+  processed_zip: "data/processed/clean_taxi_data.zip"
+  invalid_records: "data/invalid/invalid_taxi_records.csv"
+
+  save_json: true                       ##make save_json:true when the data set is small for 3.8m json may slow
+  save_zip: true
+
+database:
+  type: "mysql"                          ##change type to sqlite if u dont want mysql
+  table_name: "taxi_trips"
+  load_mode: "replace"
+
+  mysql:
+    host: "localhost"
+    port: 3306
+    user: "your username in mysql"
+    password: "your mysqlpassword"
+    database_name: "your database name"
+
+processing:
+  chunk_size: 5000
+  remove_duplicates: true
+  remove_outliers: true
+  optimize_memory: true
+  demo_mode: true
+  demo_row_limit: 100000
+
+validation:
+  required_columns:
+    - "tpep_pickup_datetime"
+    - "tpep_dropoff_datetime"
+    - "passenger_count"
+    - "trip_distance"
+    - "fare_amount"
+    - "PULocationID"
+    - "DOLocationID"
+
+  positive_columns:
+    - "trip_distance"
+    - "fare_amount"
+
+  min_passenger_count: 1
+  max_passenger_count: 7
+
+reports:
+  data_quality_report: "reports/data_quality_report.csv"
+  hourly_fare_report: "reports/hourly_fare_report.csv"
+  pickup_location_report: "reports/pickup_location_report.csv"
+
+logging:
+  log_file: "logs/pyflow.log"
+  log_level: "INFO"
