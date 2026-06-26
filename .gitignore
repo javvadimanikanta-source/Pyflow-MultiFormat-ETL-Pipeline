@@ -13,7 +13,7 @@ data/invalid/*
 !data/processed/.gitkeep
 !data/invalid/.gitkeep
 
-# Ignore generated reports
+
 reports/*.csv
 
 config/config.yaml

@@ -7,7 +7,7 @@ Extract → Transform → Load
 ```
 ---
 ## Why I Built This Project
-In real-world data work, raw data usually comes from different sources and formats. It may contain invalid values, missing columns, duplicate records, or wrong entries.
+Raw data usually comes in different formats and may contain invalid values, missing columns, duplicate records, or wrong entries.
 This project helped me understand how a data pipeline works step by step:
 ```text
 Read raw data
@@ -21,8 +21,8 @@ Generate reports
 ---
 ## Use Case
 This project can be used when we have large trip or transaction data and want to:
-* Clean the raw data
-* Remove or separate invalid records
+* Clean raw data
+* Separate invalid records
 * Convert data into different formats
 * Load clean records into a database
 * Generate simple reports for analysis
@@ -35,7 +35,7 @@ I tested this pipeline using NYC Yellow Taxi trip data.
 * Separates invalid records into a separate folder
 * Generates simple data quality and analysis reports
 * Uses YAML config file to control input, output, and database settings
-* Supports configurable row processing for testing large datasets
+* Supports configurable row processing for faster testing
 * Includes basic unit tests for main modules
 ---
 ## Tech Stack
@@ -46,6 +46,7 @@ I tested this pipeline using NYC Yellow Taxi trip data.
 * MySQL
 * SQLite
 * SQLAlchemy
+* PyMySQL
 * Pytest
 * OpenPyXL
 * Chardet
@@ -73,9 +74,13 @@ This project was tested using NYC Yellow Taxi trip data.
 The dataset contains taxi trip details such as pickup time, dropoff time, passenger count, trip distance, fare amount, pickup location, and dropoff location.
 Large raw datasets are not included in this repository because of file size.
 ---
+## Dataset Size Tested
+This pipeline was tested using NYC Yellow Taxi trip data with around 3.8 million records.
+For faster testing and demo recording, I used configurable row processing with 100,000 rows. The same ETL flow is used for extraction, validation, transformation, export, database loading, and reporting.
+---
 ## Current Scope
 The current validation and transformation logic is based on taxi trip data.
-However, the project structure can be reused for other datasets by changing:
+The project structure can be reused for other datasets by changing:
 * Required columns
 * Validation rules
 * Transformation logic
@@ -143,9 +148,9 @@ database:
   mysql:
     host: "localhost"
     port: 3306
-    user: "your_mysql_user"
-    password: "your_mysql_password"
-    database_name: "pyflow_db"
+    user: "your username"
+    password: "you passworsd"
+    database_name: "your database given name"
 ```
 ---
 ## Configurable Row Processing
@@ -163,12 +168,11 @@ processing:
   demo_mode: false
 ```
 ---
-
 ## Setup Instructions
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/PyFlow-Multi-Format-ETL-Pipeline.git
-cd PyFlow-Multi-Format-ETL-Pipeline
+git clone https://github.com/your-username/Pyflow-MultiFormat-ETL-Pipeline.git
+cd Pyflow-MultiFormat-ETL-Pipeline
 ```
 ### 2. Create Virtual Environment
 ```bash
@@ -187,7 +191,6 @@ pip install -r requirements.txt
 copy config\config.example.yaml config\config.yaml
 ```
 Update the input file path and database details.
-
 ### 5. Run the Pipeline
 ```bash
 python main.py
@@ -207,15 +210,12 @@ Database type: mysql
 Database table: taxi_trips
 ```
 ---
-
 ## MySQL Verification
-
 After running the pipeline, the loaded data can be checked in MySQL:
 ```sql
-use pyflow_db;
-select COUNT(*) AS loaded_rows from taxi_trips;
-select * from taxi_trips
-limit 10;
+USE pyflow_db;
+SELECT COUNT(*) AS loaded_rows FROM taxi_trips;
+SELECT * FROM taxi_trips LIMIT 10;
 ```
 ---
 ## Testing
@@ -225,6 +225,13 @@ To run tests:
 pytest
 ```
 ---
+## Future Improvements
+* Add Apache Spark support for very large datasets such as 50 million or 100 million+ records
+* Add Apache Airflow scheduling for automated pipeline runs
+* Add cloud storage support such as AWS S3 or Google Cloud Storage
+* Add a simple dashboard for viewing data quality and report summaries
+* Make validation rules more reusable for different datasets
+---
 ## Screenshots
 Some screenshots of the pipeline execution, generated files, reports, and MySQL verification are added in the `screenshots/` folder.
 ---
@@ -232,3 +239,4 @@ Some screenshots of the pipeline execution, generated files, reports, and MySQL 
 Through this project, I learned how to build a basic data engineering pipeline using Python.
 I learned how to handle multiple file formats, validate data, separate invalid records, transform columns, load clean data into a database, generate reports, and use configuration files to control the pipeline.
 ---
+
